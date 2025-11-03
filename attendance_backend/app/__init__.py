@@ -7,7 +7,13 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_smorest import Api
 
-from .routes.health import blp  # keep existing health blueprint
+# Blueprints
+from .routes.health import blp as health_blp
+from .routes.auth import blp as auth_blp
+from .routes.courses import blp as courses_blp
+from .routes.attendance import blp as attendance_blp
+from .routes.reports import blp as reports_blp
+
 # Import db module to ensure engine/session are available to the app when needed.
 # This does not establish a connection immediately; engine is created lazily.
 try:
@@ -20,7 +26,7 @@ except Exception:
 def _configure_app(app: Flask) -> None:
     """Apply environment-driven configuration defaults."""
     # API docs / OpenAPI
-    app.config["API_TITLE"] = os.getenv("API_TITLE", "My Flask API")
+    app.config["API_TITLE"] = os.getenv("API_TITLE", "Real-time Attendance API")
     app.config["API_VERSION"] = os.getenv("API_VERSION", "v1")
     app.config["OPENAPI_VERSION"] = "3.0.3"
     app.config["OPENAPI_URL_PREFIX"] = os.getenv("OPENAPI_URL_PREFIX", "/docs")
@@ -55,7 +61,11 @@ def create_app() -> Flask:
     api = Api(app)
 
     # Register blueprints
-    api.register_blueprint(blp)
+    api.register_blueprint(health_blp)
+    api.register_blueprint(auth_blp)
+    api.register_blueprint(courses_blp)
+    api.register_blueprint(attendance_blp)
+    api.register_blueprint(reports_blp)
 
     # Attach api object to module-level for generate_openapi compatibility
     # This mirrors the previous pattern where generate_openapi imports app, api
