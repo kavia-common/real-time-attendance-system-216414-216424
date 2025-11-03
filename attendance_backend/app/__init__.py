@@ -13,6 +13,7 @@ from .routes.auth import blp as auth_blp
 from .routes.courses import blp as courses_blp
 from .routes.attendance import blp as attendance_blp
 from .routes.reports import blp as reports_blp
+from .realtime import blp as realtime_blp
 
 # Import db module to ensure engine/session are available to the app when needed.
 # This does not establish a connection immediately; engine is created lazily.
@@ -66,6 +67,7 @@ def create_app() -> Flask:
     api.register_blueprint(courses_blp)
     api.register_blueprint(attendance_blp)
     api.register_blueprint(reports_blp)
+    api.register_blueprint(realtime_blp)
 
     # Attach api object to module-level for generate_openapi compatibility
     # This mirrors the previous pattern where generate_openapi imports app, api
